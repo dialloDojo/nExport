@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>nExport — Closing the Bauxite Revenue Gap</title>
+<style>
+/* ── Reset & base ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy:   #0D1F3C;
+  --gold:   #C9973A;
+  --gold-lt:#F0D98B;
+  --mid:    #4A6FA5;
+  --light:  #F0F4FA;
+  --white:  #FFFFFF;
+  --dark:   #1A1A2E;
+  --text:   #2E3A52;
+  --radius: 8px;
+  --max:    1120px;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  background: var(--white);
+  line-height: 1.65;
+}
+
+/* ── Language toggle — visibility managed entirely by JS ───── */
+/* No CSS rules here; JS sets inline style.display to avoid
+   specificity conflicts with display-bearing classes like .btn-primary */
+
+/* ── Nav ──────────────────────────────────────────────────── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--navy);
+  padding: 0 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 60px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.3);
+}
+.nav-logo {
+  font-size: 1.25rem; font-weight: 700; color: var(--white);
+  letter-spacing: .04em;
+}
+.nav-logo span { color: var(--gold); }
+.nav-links { display: flex; gap: 1.8rem; align-items: center; }
+.nav-links a {
+  color: rgba(255,255,255,.78); font-size: .88rem; text-decoration: none;
+  transition: color .2s;
+}
+.nav-links a:hover { color: var(--gold); }
+.lang-btn {
+  background: transparent; border: 1px solid rgba(255,255,255,.35);
+  color: rgba(255,255,255,.78); font-size: .8rem; padding: .3rem .75rem;
+  border-radius: 20px; cursor: pointer; transition: all .2s;
+}
+.lang-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+/* ── Hero ─────────────────────────────────────────────────── */
+#hero {
+  background: linear-gradient(135deg, var(--navy) 0%, #1a3560 60%, #0a2850 100%);
+  min-height: 92vh;
+  display: flex; align-items: center;
+  padding: 6rem 2rem 4rem;
+  position: relative; overflow: hidden;
+}
+#hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.hero-inner {
+  max-width: var(--max); margin: auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+  position: relative; z-index: 1;
+}
+.hero-kicker {
+  font-size: .8rem; font-weight: 700; letter-spacing: .12em;
+  color: var(--gold); text-transform: uppercase; margin-bottom: .75rem;
+}
+.hero-title {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 800; color: var(--white); line-height: 1.15;
+  margin-bottom: 1.25rem;
+}
+.hero-title em { color: var(--gold); font-style: normal; }
+.hero-sub {
+  font-size: 1.05rem; color: rgba(255,255,255,.75);
+  max-width: 520px; margin-bottom: 2rem; line-height: 1.7;
+}
+.btn-primary {
+  display: inline-block; background: var(--gold); color: var(--navy);
+  font-weight: 700; font-size: .95rem; padding: .85rem 2rem;
+  border-radius: var(--radius); text-decoration: none;
+  transition: background .2s, transform .15s;
+}
+.btn-primary:hover { background: var(--gold-lt); transform: translateY(-1px); }
+.btn-ghost {
+  display: inline-block; border: 1.5px solid rgba(255,255,255,.35);
+  color: rgba(255,255,255,.85); font-weight: 600; font-size: .95rem;
+  padding: .85rem 2rem; border-radius: var(--radius); text-decoration: none;
+  margin-left: 1rem; transition: border-color .2s, color .2s;
+}
+.btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+/* hero stat card */
+.hero-stat-card {
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(201,151,58,.35);
+  border-radius: 12px; padding: 2rem;
+  backdrop-filter: blur(8px);
+}
+.stat-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+.stat-item { text-align: center; }
+.stat-num {
+  font-size: 2rem; font-weight: 800; color: var(--gold); line-height: 1;
+}
+.stat-label { font-size: .75rem; color: rgba(255,255,255,.65); margin-top: .35rem; }
+.stat-divider {
+  border: 0; border-top: 1px solid rgba(255,255,255,.12);
+  margin: .5rem 0 1.25rem;
+}
+.stat-insight {
+  font-size: .82rem; color: rgba(255,255,255,.6); text-align: center; line-height: 1.5;
+}
+.stat-insight strong { color: var(--gold-lt); }
+
+/* ── Section scaffold ──────────────────────────────────────── */
+section { padding: 5rem 2rem; }
+.container { max-width: var(--max); margin: auto; }
+.section-tag {
+  font-size: .75rem; font-weight: 700; letter-spacing: .12em;
+  color: var(--gold); text-transform: uppercase; margin-bottom: .6rem;
+}
+.section-title {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 800; color: var(--navy); line-height: 1.2; margin-bottom: 1rem;
+}
+.section-sub {
+  font-size: 1rem; color: var(--text); max-width: 640px; line-height: 1.7;
+}
+
+/* ── Problem ───────────────────────────────────────────────── */
+#problem { background: var(--light); }
+.problem-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+  margin-top: 3rem;
+}
+.problem-card {
+  background: var(--white); border-radius: var(--radius);
+  border-top: 3px solid var(--gold); padding: 1.75rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+.problem-card .icon {
+  width: 44px; height: 44px; background: var(--navy);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  margin-bottom: 1rem;
+}
+.problem-card h3 { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: .5rem; }
+.problem-card p { font-size: .9rem; color: var(--text); line-height: 1.6; }
+
+/* ── Solution ──────────────────────────────────────────────── */
+#solution { background: var(--white); }
+.solution-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+  margin-top: 3rem; align-items: start;
+}
+.flow-diagram {
+  background: var(--light); border-radius: 12px; padding: 2rem;
+}
+.flow-step {
+  display: flex; gap: 1rem; align-items: flex-start;
+  margin-bottom: 1.25rem; position: relative;
+}
+.flow-step:not(:last-child)::after {
+  content: "";
+  position: absolute; left: 19px; top: 40px;
+  width: 2px; height: calc(100% - 8px);
+  background: var(--gold); opacity: .4;
+}
+.flow-dot {
+  flex-shrink: 0; width: 38px; height: 38px;
+  background: var(--navy); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .8rem; font-weight: 700; color: var(--gold);
+}
+.flow-text h4 { font-size: .95rem; font-weight: 700; color: var(--navy); margin-bottom: .25rem; }
+.flow-text p  { font-size: .85rem; color: var(--text); line-height: 1.5; }
+.solution-features { }
+.feature-item {
+  display: flex; gap: 1rem; align-items: flex-start;
+  padding: 1rem 0; border-bottom: 1px solid var(--light);
+}
+.feature-item:last-child { border-bottom: 0; }
+.feature-icon {
+  flex-shrink: 0; width: 36px; height: 36px;
+  background: rgba(201,151,58,.12); border-radius: var(--radius);
+  display: flex; align-items: center; justify-content: center;
+}
+.feature-text h4 { font-size: .95rem; font-weight: 700; color: var(--navy); margin-bottom: .2rem; }
+.feature-text p  { font-size: .85rem; color: var(--text); }
+
+/* ── Phases ────────────────────────────────────────────────── */
+#phases { background: var(--navy); }
+#phases .section-title { color: var(--white); }
+#phases .section-sub   { color: rgba(255,255,255,.7); }
+.phase-row {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem; margin-top: 3rem;
+}
+.phase-card {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(201,151,58,.25);
+  border-radius: 12px; padding: 1.75rem;
+  position: relative;
+}
+.phase-num {
+  font-size: .75rem; font-weight: 800; letter-spacing: .1em;
+  color: var(--gold); text-transform: uppercase; margin-bottom: .6rem;
+}
+.phase-card h3 {
+  font-size: 1.1rem; font-weight: 700; color: var(--white);
+  margin-bottom: .5rem;
+}
+.phase-card .time {
+  font-size: .78rem; color: var(--gold-lt); margin-bottom: .75rem;
+}
+.phase-card p { font-size: .88rem; color: rgba(255,255,255,.65); line-height: 1.6; }
+.phase-card .ask {
+  margin-top: 1rem; padding-top: 1rem;
+  border-top: 1px solid rgba(255,255,255,.1);
+  font-size: .82rem; color: var(--gold-lt); font-weight: 600;
+}
+.phase-active { border-color: var(--gold); background: rgba(201,151,58,.1); }
+.phase-badge {
+  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  background: var(--gold); color: var(--navy);
+  font-size: .7rem; font-weight: 800; padding: .25rem .75rem;
+  border-radius: 20px; letter-spacing: .06em; text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ── ROI ───────────────────────────────────────────────────── */
+#roi { background: var(--light); }
+.roi-table-wrap {
+  background: var(--white); border-radius: 12px;
+  overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,.07);
+  margin: 2.5rem 0;
+}
+.roi-table {
+  width: 100%; border-collapse: collapse;
+}
+.roi-table thead { background: var(--navy); }
+.roi-table thead th {
+  padding: 1rem 1.25rem; text-align: left;
+  color: var(--white); font-size: .85rem; font-weight: 700;
+  letter-spacing: .04em;
+}
+.roi-table tbody tr { border-bottom: 1px solid var(--light); }
+.roi-table tbody tr:last-child { border-bottom: 0; }
+.roi-table tbody td {
+  padding: 1rem 1.25rem; font-size: .92rem; color: var(--text);
+}
+.roi-table tbody tr:hover { background: var(--light); }
+.roi-highlight { color: var(--gold); font-weight: 700; }
+.roi-note {
+  font-size: .83rem; color: #666; margin-top: .5rem; line-height: 1.5;
+}
+
+/* ── Comparables ───────────────────────────────────────────── */
+#comparables { background: var(--white); }
+.comp-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem; margin-top: 2.5rem;
+}
+.comp-card {
+  background: var(--light); border-radius: var(--radius);
+  padding: 1.75rem; border-left: 4px solid var(--gold);
+}
+.comp-country {
+  font-size: .75rem; font-weight: 800; letter-spacing: .1em;
+  color: var(--gold); text-transform: uppercase; margin-bottom: .4rem;
+}
+.comp-card h3 { font-size: 1.6rem; font-weight: 800; color: var(--navy); margin-bottom: .4rem; }
+.comp-card p { font-size: .88rem; color: var(--text); line-height: 1.6; }
+.comp-nexport {
+  margin-top: 2rem; background: var(--navy); border-radius: var(--radius);
+  padding: 1.5rem 2rem; color: rgba(255,255,255,.8); font-size: .95rem;
+  line-height: 1.65;
+}
+.comp-nexport strong { color: var(--gold-lt); }
+
+/* ── Strategic fit ─────────────────────────────────────────── */
+#strategic { background: var(--light); }
+.fit-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem; margin-top: 2.5rem;
+}
+.fit-item {
+  background: var(--white); border-radius: var(--radius);
+  padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,.05);
+}
+.fit-item .tag {
+  display: inline-block; background: rgba(201,151,58,.12);
+  color: var(--gold); font-size: .72rem; font-weight: 700;
+  padding: .2rem .6rem; border-radius: 20px; margin-bottom: .75rem;
+  letter-spacing: .05em; text-transform: uppercase;
+}
+.fit-item h4 { font-size: .95rem; font-weight: 700; color: var(--navy); margin-bottom: .4rem; }
+.fit-item p  { font-size: .85rem; color: var(--text); line-height: 1.5; }
+
+/* ── CTA ───────────────────────────────────────────────────── */
+#cta {
+  background: linear-gradient(135deg, var(--navy), #1a3560);
+  padding: 5rem 2rem; text-align: center;
+}
+#cta .section-title { color: var(--white); margin-bottom: 1rem; }
+#cta .section-sub   { color: rgba(255,255,255,.7); margin: 0 auto 2.5rem; }
+.cta-asks {
+  display: flex; gap: 1.5rem; justify-content: center;
+  flex-wrap: wrap; margin-bottom: 2.5rem;
+}
+.cta-ask {
+  background: rgba(255,255,255,.07); border: 1px solid rgba(201,151,58,.3);
+  border-radius: var(--radius); padding: 1rem 1.5rem;
+  min-width: 200px; text-align: left;
+}
+.cta-ask-num { font-size: 1.6rem; font-weight: 800; color: var(--gold); }
+.cta-ask-label { font-size: .82rem; color: rgba(255,255,255,.7); margin-top: .2rem; }
+.cta-contact {
+  font-size: .9rem; color: rgba(255,255,255,.55); margin-top: 2rem;
+}
+.cta-contact a { color: var(--gold-lt); }
+
+/* ── Footer ────────────────────────────────────────────────── */
+footer {
+  background: var(--dark); padding: 2rem;
+  text-align: center; font-size: .8rem; color: rgba(255,255,255,.35);
+}
+
+/* ── SVG icons inline ──────────────────────────────────────── */
+svg { display: block; }
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  .hero-stat-card { display: none; }
+  .problem-grid, .phase-row, .fit-grid { grid-template-columns: 1fr; }
+  .solution-grid, .comp-grid { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">n<span>Export</span></div>
+  <div class="nav-links">
+    <a href="#problem">
+      <span class="lang-en">The Gap</span>
+      <span class="lang-fr">Le Problème</span>
+    </a>
+    <a href="#solution">
+      <span class="lang-en">Solution</span>
+      <span class="lang-fr">Solution</span>
+    </a>
+    <a href="#phases">
+      <span class="lang-en">Phases</span>
+      <span class="lang-fr">Phases</span>
+    </a>
+    <a href="#roi">ROI</a>
+    <a href="#cta">
+      <span class="lang-en">Contact</span>
+      <span class="lang-fr">Contact</span>
+    </a>
+  </div>
+  <button class="lang-btn" onclick="toggleLang()">FR</button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div>
+      <p class="hero-kicker lang-en">Republic of Guinea · Bauxite Export Integrity</p>
+      <p class="hero-kicker lang-fr">République de Guinée · Intégrité des exportations de bauxite</p>
+
+      <h1 class="hero-title lang-en">
+        Guinea exports <em>182 million tonnes</em> of bauxite a year.<br>
+        How much revenue reaches the treasury?
+      </h1>
+      <h1 class="hero-title lang-fr">
+        La Guinée exporte <em>182 millions de tonnes</em> de bauxite par an.<br>
+        Combien de recettes atteignent le trésor public ?
+      </h1>
+
+      <p class="hero-sub lang-en">
+        nExport is a digital capture platform that closes the gap between what leaves the dock and what is declared to customs — restoring fiscal yield without replacing any existing system.
+      </p>
+      <p class="hero-sub lang-fr">
+        nExport est une plateforme de saisie numérique qui comble l'écart entre ce qui quitte le quai et ce qui est déclaré en douane, en restaurant le rendement fiscal sans remplacer aucun système existant.
+      </p>
+
+      <a href="#cta" class="btn-primary lang-en">Request a Briefing</a>
+      <a href="#cta" class="btn-primary lang-fr">Demander un briefing</a>
+      <a href="#solution" class="btn-ghost lang-en">How it works</a>
+      <a href="#solution" class="btn-ghost lang-fr">Comment ça marche</a>
+    </div>
+
+    <div class="hero-stat-card">
+      <div class="stat-row">
+        <div class="stat-item">
+          <div class="stat-num">#1</div>
+          <div class="stat-label lang-en">World's largest bauxite exporter</div>
+          <div class="stat-label lang-fr">Premier exportateur mondial de bauxite</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">182M</div>
+          <div class="stat-label lang-en">Tonnes shipped in 2025</div>
+          <div class="stat-label lang-fr">Tonnes expédiées en 2025</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">17%</div>
+          <div class="stat-label lang-en">Govt revenues from mining</div>
+          <div class="stat-label lang-fr">Recettes publiques des mines</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">~$50</div>
+          <div class="stat-label lang-en">FOB price per tonne (2025)</div>
+          <div class="stat-label lang-fr">Prix FOB par tonne (2025)</div>
+        </div>
+      </div>
+      <hr class="stat-divider" />
+      <p class="stat-insight lang-en">
+        At <strong>3% under-declaration</strong>, Guinea loses an estimated<br>
+        <strong>$15M+ per year</strong> in recoverable fiscal yield — at the Port of Conakry alone.
+      </p>
+      <p class="stat-insight lang-fr">
+        À <strong>3 % de sous-déclaration</strong>, la Guinée perd environ<br>
+        <strong>15 M$ par an</strong> en recettes fiscales récupérables — au seul port de Conakry.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="container">
+    <p class="section-tag lang-en">The Gap</p>
+    <p class="section-tag lang-fr">Le Problème</p>
+    <h2 class="section-title lang-en">Three layers are digital. The critical layer is still on paper.</h2>
+    <h2 class="section-title lang-fr">Trois couches sont numérisées. La couche critique reste sur papier.</h2>
+    <p class="section-sub lang-en">
+      Guinea has invested in digital customs infrastructure — declarations via Sydonia, online payments and transit tracking via Webb Fontaine. But the physical-event layer — weighbridge tickets, stockpile receipts, loading tallies — is still paper-based. That is the gap where under-declaration of tonnage and grade actually occurs.
+    </p>
+    <p class="section-sub lang-fr">
+      La Guinée a investi dans l'infrastructure douanière numérique — déclarations via Sydonia, paiements en ligne et suivi des transits via Webb Fontaine. Mais la couche d'événements physiques — tickets de bascule, reçus de stockpile, tallies de chargement — reste sur papier. C'est là que la sous-déclaration de tonnage et de qualité se produit.
+    </p>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C9973A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+          </svg>
+        </div>
+        <h3 class="lang-en">Paper weighbridge tickets</h3>
+        <h3 class="lang-fr">Tickets de bascule papier</h3>
+        <p class="lang-en">Physical tonnage records are handwritten at the dock. No digital audit trail. No cross-check against vessel manifests.</p>
+        <p class="lang-fr">Les enregistrements de tonnage physiques sont manuscrits au quai. Pas de piste d'audit numérique. Pas de contre-vérification avec les manifestes des navires.</p>
+      </div>
+      <div class="problem-card">
+        <div class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C9973A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <h3 class="lang-en">Declaration disconnected from loading</h3>
+        <h3 class="lang-fr">Déclaration déconnectée du chargement</h3>
+        <p class="lang-en">What is declared to customs (Sydonia) is entered manually, long after the physical event. There is no automated reconciliation between the dock and the declaration system.</p>
+        <p class="lang-fr">Ce qui est déclaré en douane (Sydonia) est saisi manuellement, longtemps après l'événement physique. Il n'y a pas de rapprochement automatisé entre le quai et le système de déclaration.</p>
+      </div>
+      <div class="problem-card">
+        <div class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C9973A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+        <h3 class="lang-en">Fiscal leakage at scale</h3>
+        <h3 class="lang-fr">Fuite fiscale à grande échelle</h3>
+        <p class="lang-en">Even 1% systematic under-declaration across 182M tonnes recovers ~$1.8M/year. The base case (3%) implies $15M+. The existing reference-price decree sets the value floor — nExport enforces the volume side.</p>
+        <p class="lang-fr">Même 1 % de sous-déclaration systématique sur 182 M de tonnes récupère ~1,8 M$/an. Le scénario de base (3 %) implique 15 M$+. Le décret de prix de référence fixe le plancher de valeur — nExport fait respecter le côté volume.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section id="solution">
+  <div class="container">
+    <p class="section-tag lang-en">The Platform</p>
+    <p class="section-tag lang-fr">La Plateforme</p>
+    <h2 class="section-title lang-en">Digital capture at the dock floor — upstream of every existing system.</h2>
+    <h2 class="section-title lang-fr">Saisie numérique au niveau du quai — en amont de chaque système existant.</h2>
+    <p class="section-sub lang-en">
+      nExport sits at the physical event — the weighbridge, the stockpile, the loading conveyor. It feeds verified data into Guinea's existing Sydonia and GUCEG infrastructure, making those investments more accurate rather than replacing them.
+    </p>
+    <p class="section-sub lang-fr">
+      nExport se positionne au niveau de l'événement physique — la bascule, le stockpile, le convoyeur de chargement. Il alimente les données vérifiées dans les infrastructures Sydonia et GUCEG existantes de la Guinée, rendant ces investissements plus précis plutôt que de les remplacer.
+    </p>
+
+    <div class="solution-grid">
+      <div class="flow-diagram">
+        <div class="flow-step">
+          <div class="flow-dot">1</div>
+          <div class="flow-text">
+            <h4 class="lang-en">Field capture (iPad app)</h4>
+            <h4 class="lang-fr">Saisie terrain (iPad)</h4>
+            <p class="lang-en">Dock workers fill weighbridge tickets and stockpile forms digitally. Photo fallback with OCR for legacy paper holdovers. GPS-stamped, tamper-evident.</p>
+            <p class="lang-fr">Les agents de quai remplissent les tickets de bascule et les formulaires de stockpile numériquement. Fallback photo avec OCR. Horodatage GPS, anti-fraude.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-dot">2</div>
+          <div class="flow-text">
+            <h4 class="lang-en">Real-time cross-check</h4>
+            <h4 class="lang-fr">Vérification en temps réel</h4>
+            <p class="lang-en">Captured tonnage, grade, and vessel data is matched against the Sydonia declaration in real time. Discrepancies are flagged automatically.</p>
+            <p class="lang-fr">Le tonnage, la qualité et les données du navire capturés sont comparés en temps réel à la déclaration Sydonia. Les écarts sont signalés automatiquement.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-dot">3</div>
+          <div class="flow-text">
+            <h4 class="lang-en">DGD dashboard</h4>
+            <h4 class="lang-fr">Tableau de bord DGD</h4>
+            <p class="lang-en">Customs officials see live loading status, discrepancy alerts, and trend analysis. Fully auditable export-by-export record for EITI reporting.</p>
+            <p class="lang-fr">Les agents des douanes voient le statut de chargement en direct, les alertes de divergence et l'analyse des tendances. Dossier entièrement vérifiable pour le rapport ITIE.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-dot" style="background:var(--gold);">4</div>
+          <div class="flow-text">
+            <h4 class="lang-en">Camera ML (Phase 1+)</h4>
+            <h4 class="lang-fr">Caméras + IA (Phase 1+)</h4>
+            <p class="lang-en">Fixed cameras at stockpile and conveyor provide computer-vision weight estimates, calibrated against Phase 0 ground truth. Independent verification that requires no operator cooperation.</p>
+            <p class="lang-fr">Des caméras fixes au stockpile et sur le convoyeur fournissent des estimations de poids par vision artificielle, calibrées sur les données réelles de la Phase 0. Vérification indépendante sans coopération des opérateurs.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="solution-features">
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9973A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <div class="feature-text">
+            <h4 class="lang-en">Two-sided platform</h4>
+            <h4 class="lang-fr">Plateforme bilatérale</h4>
+            <p class="lang-en">Dock workers capture; customs officials verify. Same data, two views, one source of truth.</p>
+            <p class="lang-fr">Les agents de quai saisissent ; les douaniers vérifient. Mêmes données, deux vues, une seule source de vérité.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9973A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="feature-text">
+            <h4 class="lang-en">Additive to Webb Fontaine & Sydonia</h4>
+            <h4 class="lang-fr">Complémentaire à Webb Fontaine & Sydonia</h4>
+            <p class="lang-en">nExport feeds verified physical data upstream into existing customs infrastructure. No displacement of prior investment.</p>
+            <p class="lang-fr">nExport alimente les données physiques vérifiées en amont dans l'infrastructure douanière existante. Aucun remplacement de l'investissement précédent.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9973A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </div>
+          <div class="feature-text">
+            <h4 class="lang-en">EITI-aligned audit trail</h4>
+            <h4 class="lang-fr">Piste d'audit alignée sur l'ITIE</h4>
+            <p class="lang-en">Every export event is timestamped and retained. Feeds Guinea's 2025 EITI validation with operational evidence, not estimates.</p>
+            <p class="lang-fr">Chaque événement d'exportation est horodaté et conservé. Alimente la validation ITIE 2025 de la Guinée avec des preuves opérationnelles.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9973A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          </div>
+          <div class="feature-text">
+            <h4 class="lang-en">Offline-first field operation</h4>
+            <h4 class="lang-fr">Opération terrain hors-ligne d'abord</h4>
+            <p class="lang-en">Forms are captured offline and sync on connectivity. Ports with unreliable internet are fully supported.</p>
+            <p class="lang-fr">Les formulaires sont saisis hors connexion et synchronisés à la connexion. Les ports avec un internet peu fiable sont entièrement pris en charge.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHASES -->
+<section id="phases">
+  <div class="container">
+    <p class="section-tag">
+      <span class="lang-en">Phased Rollout — De-risked for the Ministry</span>
+      <span class="lang-fr">Déploiement par phases — Risque réduit pour le Ministère</span>
+    </p>
+    <h2 class="section-title lang-en">The Ministry's only commitment is Phase 0.</h2>
+    <h2 class="section-title lang-fr">Le seul engagement du Ministère est la Phase 0.</h2>
+    <p class="section-sub lang-en">Each phase unlocks only on measured success at the prior gate. The pilot delivers a working system and a baseline discrepancy report in 90 days.</p>
+    <p class="section-sub lang-fr">Chaque phase ne s'ouvre que sur la base d'un succès mesuré à la porte précédente. Le pilote livre un système fonctionnel et un rapport de divergence de base en 90 jours.</p>
+
+    <div class="phase-row">
+      <div class="phase-card phase-active">
+        <div class="phase-badge lang-en">Current ask</div>
+        <div class="phase-badge lang-fr">Demande actuelle</div>
+        <p class="phase-num lang-en">Phase 0 — Pilot</p>
+        <p class="phase-num lang-fr">Phase 0 — Pilote</p>
+        <h3 class="lang-en">iPad Digitization at Conakry</h3>
+        <h3 class="lang-fr">Numérisation iPad à Conakry</h3>
+        <p class="time lang-en">Months 1–3 · One bauxite berth</p>
+        <p class="time lang-fr">Mois 1–3 · Un quai bauxite</p>
+        <p class="lang-en">Digital form capture replaces paper at the weighbridge and stockpile. 30+ port personnel trained. Baseline discrepancy report delivered at Day 90.</p>
+        <p class="lang-fr">La saisie numérique remplace le papier à la bascule et au stockpile. 30+ agents formés. Rapport de divergence de référence livré au Jour 90.</p>
+        <p class="ask lang-en">Sovereign funding: ~$460,000</p>
+        <p class="ask lang-fr">Financement souverain : ~460 000 $</p>
+      </div>
+      <div class="phase-card">
+        <p class="phase-num lang-en">Phase 1 — Camera Shadow Mode</p>
+        <p class="phase-num lang-fr">Phase 1 — Caméras en mode ombre</p>
+        <h3 class="lang-en">Computer Vision Calibration</h3>
+        <h3 class="lang-fr">Calibration par vision artificielle</h3>
+        <p class="time lang-en">Months 4–9 · Unlocks on Day-90 results</p>
+        <p class="time lang-fr">Mois 4–9 · S'ouvre sur les résultats du Jour 90</p>
+        <p class="lang-en">Fixed cameras installed. ML weight-estimation model calibrated against Phase 0 ground truth. Shadow mode: detect without blocking.</p>
+        <p class="lang-fr">Caméras fixes installées. Modèle ML d'estimation du poids calibré sur la vérité terrain de la Phase 0. Mode ombre : détecter sans bloquer.</p>
+        <p class="ask lang-en">Co-financing: World Bank / AfDB ~$1.2M</p>
+        <p class="ask lang-fr">Co-financement : Banque mondiale / BAD ~1,2 M$</p>
+      </div>
+      <div class="phase-card">
+        <p class="phase-num lang-en">Phase 2 — Active Enforcement</p>
+        <p class="phase-num lang-fr">Phase 2 — Application active</p>
+        <h3 class="lang-en">Fee Model + Port Expansion</h3>
+        <h3 class="lang-fr">Modèle de redevance + expansion</h3>
+        <p class="time lang-en">Month 10+ · Unlocks on Phase 1 accuracy threshold</p>
+        <p class="time lang-fr">Mois 10+ · S'ouvre sur le seuil de précision de la Phase 1</p>
+        <p class="lang-en">Discrepancy alerts activate. $0.10/tonne fee model funds operations and expansion to additional Guinea ports.</p>
+        <p class="lang-fr">Les alertes de divergence s'activent. Le modèle de redevance 0,10 $/tonne finance les opérations et l'expansion vers d'autres ports guinéens.</p>
+        <p class="ask lang-en">Self-funding at scale</p>
+        <p class="ask lang-fr">Auto-financement à grande échelle</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROI -->
+<section id="roi">
+  <div class="container">
+    <p class="section-tag lang-en">Fiscal Case</p>
+    <p class="section-tag lang-fr">Analyse fiscale</p>
+    <h2 class="section-title lang-en">The conservative case alone justifies Phase 0.</h2>
+    <h2 class="section-title lang-fr">Le scénario conservateur seul justifie la Phase 0.</h2>
+    <p class="section-sub lang-en">
+      Per-tonne implicit fiscal yield triangulated from World Bank data: mining = 17% of Guinea government revenues (2022) against 2024 bauxite tonnage implies ~$3.50–4.70/tonne baseline.
+    </p>
+    <p class="section-sub lang-fr">
+      Le rendement fiscal implicite par tonne triangulé à partir des données de la Banque mondiale : exploitation minière = 17 % des recettes publiques guinéennes (2022) par rapport au tonnage de bauxite 2024, ce qui implique ~3,50–4,70 $/tonne.
+    </p>
+
+    <!-- English table -->
+    <div class="roi-table-wrap lang-en">
+      <table class="roi-table">
+        <thead>
+          <tr>
+            <th>Scenario</th>
+            <th>Under-declaration assumed</th>
+            <th>Annual revenue recovered</th>
+            <th>Payback (vs $1.7M Phase 0+1)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Conservative</td>
+            <td>1%</td>
+            <td class="roi-highlight">~$1.8M / year</td>
+            <td>~11 months</td>
+          </tr>
+          <tr>
+            <td>Base case</td>
+            <td>3%</td>
+            <td class="roi-highlight">~$15M / year</td>
+            <td>~6 weeks</td>
+          </tr>
+          <tr>
+            <td>Aggressive</td>
+            <td>5%</td>
+            <td class="roi-highlight">~$49M / year</td>
+            <td>~13 days</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- French table -->
+    <div class="roi-table-wrap lang-fr">
+      <table class="roi-table">
+        <thead>
+          <tr>
+            <th>Scénario</th>
+            <th>Sous-déclaration supposée</th>
+            <th>Recettes annuelles récupérées</th>
+            <th>Retour sur investissement (vs 1,7 M$)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Conservateur</td>
+            <td>1 %</td>
+            <td class="roi-highlight">~1,8 M$ / an</td>
+            <td>~11 mois</td>
+          </tr>
+          <tr>
+            <td>Scénario de base</td>
+            <td>3 %</td>
+            <td class="roi-highlight">~15 M$ / an</td>
+            <td>~6 semaines</td>
+          </tr>
+          <tr>
+            <td>Ambitieux</td>
+            <td>5 %</td>
+            <td class="roi-highlight">~49 M$ / an</td>
+            <td>~13 jours</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="roi-note lang-en">Sources: World Bank Guinea fiscal data (2022); Guinea bauxite export volumes (145M tonnes 2024, 182M tonnes 2025); FOB price range $33–73/tonne, centerline ~$50. Under-declaration rates are conservative estimates for scenario analysis — not claims.</p>
+    <p class="roi-note lang-fr">Sources : Données fiscales de la Guinée de la Banque mondiale (2022) ; volumes d'exportation de bauxite de Guinée (145 M de tonnes en 2024, 182 M de tonnes en 2025) ; fourchette de prix FAB 33–73 $/tonne, valeur médiane ~50 $. Les taux de sous-déclaration sont des estimations conservatrices pour l'analyse de scénarios.</p>
+  </div>
+</section>
+
+<!-- COMPARABLES -->
+<section id="comparables">
+  <div class="container">
+    <p class="section-tag lang-en">Regional Proof Points</p>
+    <p class="section-tag lang-fr">Preuves régionales</p>
+    <h2 class="section-title lang-en">West Africa has already shown what digitization delivers.</h2>
+    <h2 class="section-title lang-fr">L'Afrique de l'Ouest a déjà montré ce que la numérisation apporte.</h2>
+
+    <div class="comp-grid">
+      <div class="comp-card">
+        <p class="comp-country">Senegal</p>
+        <h3 class="lang-en">+$170M</h3>
+        <h3 class="lang-fr">+170 M$</h3>
+        <p class="lang-en">Customs revenue recovered in 2025 vs. 2024 (+103 billion CFA), explicitly attributed to continued customs digitization via the GAINDE single-window program.</p>
+        <p class="lang-fr">Recettes douanières récupérées en 2025 vs. 2024 (+103 milliards CFA), explicitement attribuées à la numérisation douanière via le programme guichet unique GAINDE.</p>
+      </div>
+      <div class="comp-card">
+        <p class="comp-country">Togo</p>
+        <h3 class="lang-en">+21% / +105%</h3>
+        <h3 class="lang-fr">+21% / +105%</h3>
+        <p class="lang-en">Customs revenue +21% YoY in Q1 2024; VAT on imports +105% YoY — following customs modernization by the OTR (Office Togolais des Recettes).</p>
+        <p class="lang-fr">Recettes douanières +21% en glissement annuel au T1 2024 ; TVA sur les importations +105% — suite à la modernisation douanière par l'OTR.</p>
+      </div>
+    </div>
+
+    <div class="comp-nexport">
+      <strong class="lang-en">Where nExport goes further:</strong>
+      <strong class="lang-fr">Là où nExport va plus loin :</strong>
+      <span class="lang-en"> Neither Senegal nor Togo targeted the specific stockpile-and-weighbridge gap that nExport addresses. Their gains came from declaration-layer digitization. nExport closes the physical-event layer that sits upstream of every declaration system — the next step those countries have not yet taken, and the layer most exposed to under-declaration fraud in bulk mineral export.</span>
+      <span class="lang-fr"> Ni le Sénégal ni le Togo n'ont ciblé le problème spécifique du stockpile et de la bascule que nExport traite. Leurs gains sont venus de la numérisation au niveau des déclarations. nExport ferme la couche d'événements physiques en amont de tout système de déclaration — l'étape suivante que ces pays n'ont pas encore franchie.</span>
+    </div>
+  </div>
+</section>
+
+<!-- STRATEGIC FIT -->
+<section id="strategic">
+  <div class="container">
+    <p class="section-tag lang-en">Strategic Alignment</p>
+    <p class="section-tag lang-fr">Alignement stratégique</p>
+    <h2 class="section-title lang-en">nExport implements obligations Guinea has already made.</h2>
+    <h2 class="section-title lang-fr">nExport met en œuvre des obligations que la Guinée a déjà prises.</h2>
+
+    <div class="fit-grid">
+      <div class="fit-item">
+        <span class="tag">EITI</span>
+        <h4 class="lang-en">2025 EITI Validation</h4>
+        <h4 class="lang-fr">Validation ITIE 2025</h4>
+        <p class="lang-en">Guinea's EITI validation is in progress. nExport is operational tooling for the transparency commitments Guinea has already made — every export event becomes auditable evidence.</p>
+        <p class="lang-fr">La validation ITIE de la Guinée est en cours. nExport est l'outil opérationnel des engagements de transparence que la Guinée a déjà pris.</p>
+      </div>
+      <div class="fit-item">
+        <span class="tag lang-en">Legal</span>
+        <span class="tag lang-fr">Légal</span>
+        <h4 class="lang-en">Sept. 2022 Reference-Price Decree</h4>
+        <h4 class="lang-fr">Décret de prix de référence (sept. 2022)</h4>
+        <p class="lang-en">The decree set a value floor for bauxite exports. nExport closes the volume and quality side the reference price cannot — enforcing the decree more rigorously, not imposing new obligations.</p>
+        <p class="lang-fr">Le décret a fixé un plancher de valeur pour les exportations de bauxite. nExport ferme le côté volume et qualité que le prix de référence ne peut pas couvrir.</p>
+      </div>
+      <div class="fit-item">
+        <span class="tag lang-en">Complementary</span>
+        <span class="tag lang-fr">Complémentaire</span>
+        <h4 class="lang-en">Additive to Existing Digital Stack</h4>
+        <h4 class="lang-fr">Additionnel à la pile numérique existante</h4>
+        <p class="lang-en">Sydonia, GUCEG (Webb Fontaine Single Window), and Webb Transit Tracking are all downstream of nExport's capture layer. nExport makes those platforms operate on cleaner inputs.</p>
+        <p class="lang-fr">Sydonia, GUCEG (guichet unique Webb Fontaine) et Webb Transit Tracking sont tous en aval de la couche de capture de nExport. nExport les fait fonctionner sur des données plus précises.</p>
+      </div>
+      <div class="fit-item">
+        <span class="tag lang-en">Sovereignty</span>
+        <span class="tag lang-fr">Souveraineté</span>
+        <h4 class="lang-en">Guinea-Hosted, Government-Controlled</h4>
+        <h4 class="lang-fr">Hébergé en Guinée, contrôlé par le gouvernement</h4>
+        <p class="lang-en">Data residency in Guinea. A Guinea-registered entity holds the sovereign contract. Government retains full read access to all captured data at all times.</p>
+        <p class="lang-fr">Résidence des données en Guinée. Une entité enregistrée en Guinée détient le contrat souverain. Le gouvernement conserve un accès total en lecture à toutes les données capturées.</p>
+      </div>
+      <div class="fit-item">
+        <span class="tag lang-en">De-risked</span>
+        <span class="tag lang-fr">Risque réduit</span>
+        <h4 class="lang-en">Phase Gates, Not a Bet</h4>
+        <h4 class="lang-fr">Portes de phase, pas un pari</h4>
+        <p class="lang-en">The Ministry's only initial commitment is $460K for a 90-day pilot at one Conakry berth. Phase 1 and Phase 2 funding is conditional on measured outcomes at each prior gate.</p>
+        <p class="lang-fr">Le seul engagement initial du Ministère est de 460 000 $ pour un pilote de 90 jours sur un quai de Conakry. Le financement des phases 1 et 2 est conditionnel aux résultats mesurés.</p>
+      </div>
+      <div class="fit-item">
+        <span class="tag lang-en">Fiscal</span>
+        <span class="tag lang-fr">Fiscal</span>
+        <h4 class="lang-en">Ministry of Budget — Core Mandate</h4>
+        <h4 class="lang-fr">Ministère du Budget — Mission principale</h4>
+        <p class="lang-en">Revenue recovery is the Ministry of Budget's primary mandate. nExport's ROI is framed entirely in fiscal-recovery terms, not technology for its own sake.</p>
+        <p class="lang-fr">Le recouvrement des recettes est le mandat principal du Ministère du Budget. Le ROI de nExport est entièrement formulé en termes de recouvrement fiscal.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="container">
+    <p class="section-tag lang-en">The Ask</p>
+    <p class="section-tag lang-fr">La Demande</p>
+    <h2 class="section-title lang-en">Three commitments to begin within 21 days.</h2>
+    <h2 class="section-title lang-fr">Trois engagements pour commencer dans les 21 jours.</h2>
+    <p class="section-sub lang-en">Phase 0 can begin within three weeks of authorization. The 90-day pilot delivers a working system, trained port personnel, and a documented decision point for Phase 1.</p>
+    <p class="section-sub lang-fr">La Phase 0 peut commencer dans les trois semaines suivant l'autorisation. Le pilote de 90 jours livre un système fonctionnel, des agents formés, et un point de décision documenté pour la Phase 1.</p>
+
+    <div class="cta-asks">
+      <div class="cta-ask">
+        <div class="cta-ask-num">01</div>
+        <div class="cta-ask-label lang-en">Letter of intent authorizing the pilot and confirming Phase 0 funding</div>
+        <div class="cta-ask-label lang-fr">Lettre d'intention autorisant le pilote et confirmant le financement Phase 0</div>
+      </div>
+      <div class="cta-ask">
+        <div class="cta-ask-num">02</div>
+        <div class="cta-ask-label lang-en">Named DGD coordinator with operational authority at Conakry customs</div>
+        <div class="cta-ask-label lang-fr">Coordinateur DGD désigné avec autorité opérationnelle à la douane de Conakry</div>
+      </div>
+      <div class="cta-ask">
+        <div class="cta-ask-num">03</div>
+        <div class="cta-ask-label lang-en">Ministry letter of introduction to candidate pilot operators</div>
+        <div class="cta-ask-label lang-fr">Lettre d'introduction du Ministère aux opérateurs pilotes candidats</div>
+      </div>
+    </div>
+
+    <a href="mailto:adiallovc@gmail.com" class="btn-primary lang-en">Request a Briefing</a>
+    <a href="mailto:adiallovc@gmail.com" class="btn-primary lang-fr">Demander un briefing</a>
+
+    <p class="cta-contact lang-en">To receive the full pitch package (executive summary, ROI model, 90-day pilot proposal): <a href="mailto:adiallovc@gmail.com">adiallovc@gmail.com</a></p>
+    <p class="cta-contact lang-fr">Pour recevoir le dossier complet (résumé exécutif, modèle de ROI, proposition de pilote de 90 jours) : <a href="mailto:adiallovc@gmail.com">adiallovc@gmail.com</a></p>
+  </div>
+</section>
+
+<footer>
+  <p>nExport · Confidential · <span class="lang-en">For authorized recipients only</span><span class="lang-fr">Pour les destinataires autorisés uniquement</span></p>
+</footer>
+
+<script>
+// Apply language by setting inline style.display on every .lang-en / .lang-fr element.
+// Inline styles win over any class-based display rules, so this avoids specificity
+// conflicts with classes like .btn-primary that also set display.
+function applyLang(isFr) {
+  document.body.classList.toggle('fr', isFr);
+  document.querySelectorAll('.lang-en').forEach(el => {
+    el.style.display = isFr ? 'none' : '';
+  });
+  document.querySelectorAll('.lang-fr').forEach(el => {
+    el.style.display = isFr ? '' : 'none';
+  });
+  document.querySelector('.lang-btn').textContent = isFr ? 'EN' : 'FR';
+}
+
+function toggleLang() {
+  applyLang(!document.body.classList.contains('fr'));
+}
+
+// Initialize to English on load
+document.addEventListener('DOMContentLoaded', () => applyLang(false));
+</script>
+</body>
+</html>
